@@ -109,6 +109,7 @@ document.addEventListener('DOMContentLoaded',() => {
         modal.classList.add('show');
         modal.classList.remove('hide');
         document.body.style.overflow='hidden';
+        clearInterval(modalTimerId);
     }
     
     function closeModal (){
@@ -140,8 +141,21 @@ document.addEventListener('DOMContentLoaded',() => {
 
     });
 
-    //const modalTimerId=setTimeout();
+    const modalTimerId=setTimeout(openModal, 3000);
+    
+// window.pageYOffset; // свойство которое отвечает за прокрутку сверху
+//document.documentElement.clientHeight // свойство которое отображает высоту видимой части клиенту
+// document.documentElement.scrollHeight // свойство которое отображает высоту с полным контентом,с полной прокруткой 
 
-   
+    function showModalByScroll(){
+        if(window.pageYOffset+document.documentElement.clientHeight===document.documentElement.scrollHeight){
+            openModal();
+            window.removeEventListener('scroll', showModalByScroll);
+        }
+        
+    }
+
+    window.addEventListener('scroll', showModalByScroll);
+
 
 });
