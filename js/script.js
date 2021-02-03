@@ -1,26 +1,26 @@
 "use strict";
 
-document.addEventListener('DOMContentLoaded',() => {
-    
+document.addEventListener('DOMContentLoaded', () => {
+
     // TABS
 
-    const tabs=document.querySelectorAll('.tabheader__item'),
-        tabsContent=document.querySelectorAll('.tabcontent'),
-        tabsParent=document.querySelector('.tabheader__items');
+    const tabs = document.querySelectorAll('.tabheader__item'),
+        tabsContent = document.querySelectorAll('.tabcontent'),
+        tabsParent = document.querySelector('.tabheader__items');
 
-    function hideTabContent () {
-        tabsContent.forEach(item =>{
-            item.style.display='none';
+    function hideTabContent() {
+        tabsContent.forEach(item => {
+            item.style.display = 'none';
         });
 
-        tabs.forEach(item =>{
+        tabs.forEach(item => {
             item.classList.remove('tabheader__item_active');
         });
 
     }
 
-    function showTabContent(i=0){ // вызов по умолчанию
-        tabsContent[i].style.display='block';
+    function showTabContent(i = 0) { // вызов по умолчанию
+        tabsContent[i].style.display = 'block';
         tabs[i].classList.add('tabheader__item_active');
 
     }
@@ -28,70 +28,70 @@ document.addEventListener('DOMContentLoaded',() => {
     hideTabContent();
     showTabContent();
 
-  tabsParent.addEventListener('click', (event)=>{
-       const target=event.target;
-         if(target && target.classList.contains('tabheader__item')){
-           tabs.forEach((item, i)=>{
-                if(item==target){
-                hideTabContent();
-                showTabContent(i);
-               }
+    tabsParent.addEventListener('click', (event) => {
+        const target = event.target;
+        if (target && target.classList.contains('tabheader__item')) {
+            tabs.forEach((item, i) => {
+                if (item == target) {
+                    hideTabContent();
+                    showTabContent(i);
+                }
             });
-  
+
         }
 
     });
 
     // TIMER
 
-    const deadline='2021-03-25';
+    const deadline = '2021-03-25';
 
-    function getRemainingTime ( endtime) {
-        const t=Date.parse(endtime) - Date.parse(new Date()),
-              days=Math.floor( (t/(1000*60*60*24)) ),
-              hours=Math.floor((t/(1000*60*60)%24)),
-              minutes=Math.floor((t/1000/60) % 60),
-              seconds=Math.floor((t/1000)%60);
+    function getRemainingTime(endtime) {
+        const t = Date.parse(endtime) - Date.parse(new Date()),
+            days = Math.floor((t / (1000 * 60 * 60 * 24))),
+            hours = Math.floor((t / (1000 * 60 * 60) % 24)),
+            minutes = Math.floor((t / 1000 / 60) % 60),
+            seconds = Math.floor((t / 1000) % 60);
 
         return {
             'total': t,
             'days': days,
-            'hours':hours,
+            'hours': hours,
             'minutes': minutes,
             'seconds': seconds
-                 
+
         };
     }
 
-    function getZero (num) {
-        if (num >=0 && num < 10) {
+    function getZero(num) {
+        if (num >= 0 && num < 10) {
             return `0${num}`;
-        }else{
+        } else {
             return num;
         }
     }
 
-    function setClock (selector, endtime) {
+    function setClock(selector, endtime) {
 
-        const timer=document.querySelector(selector),
-            days=document.querySelector('#days'),
-            hours=document.querySelector('#hours'),
-            minutes=document.querySelector('#minutes'),
-            seconds=document.querySelector('#seconds'),
-            timeInterval=setInterval(updateClock, 1000);
+        const timer = document.querySelector(selector),
+            days = document.querySelector('#days'),
+            hours = document.querySelector('#hours'),
+            minutes = document.querySelector('#minutes'),
+            seconds = document.querySelector('#seconds'),
+            timeInterval = setInterval(updateClock, 1000);
 
-        updateClock();   
-            
-        
-        function updateClock (){
-            const t=getRemainingTime(endtime);
+        updateClock();
 
-            days.innerHTML=getZero(t.days);
-            hours.innerHTML= getZero(t.hours);
-            minutes.innerHTML=getZero(t.minutes);
-            seconds.innerHTML=getZero(t.seconds);
 
-            if(t.total <= 0) {
+        function updateClock() {
+            const t = getRemainingTime(endtime);
+
+            days.innerHTML = getZero(t.days);
+            hours.innerHTML = getZero(t.hours);
+            minutes.innerHTML = getZero(t.minutes);
+            seconds.innerHTML = getZero(t.seconds);
+
+            if (t.total <= 0) {
                 clearInterval(timeInterval);
             }
         }
@@ -101,57 +101,57 @@ document.addEventListener('DOMContentLoaded',() => {
 
     // MODALS
 
-    const modalTrigger=document.querySelectorAll('[data-modal'),
-        modal=document.querySelector('.modal');
-        
+    const modalTrigger = document.querySelectorAll('[data-modal'),
+        modal = document.querySelector('.modal');
 
-    function openModal(){
+
+    function openModal() {
         modal.classList.add('show');
         modal.classList.remove('hide');
-        document.body.style.overflow='hidden';
+        document.body.style.overflow = 'hidden';
         clearInterval(modalTimerId);
     }
-    
-    function closeModal (){
+
+    function closeModal() {
         modal.classList.add('hide');
         modal.classList.remove('show');
-        document.body.style.overflow='';
+        document.body.style.overflow = '';
     }
 
-    modalTrigger.forEach((btn)=>{
+    modalTrigger.forEach((btn) => {
         btn.addEventListener('click', openModal);
 
 
     });
 
 
-    modal.addEventListener('click', (e)=>{
+    modal.addEventListener('click', (e) => {
 
-        if(e.target===modal || e.target.getAttribute('data-close')==''){
+        if (e.target === modal || e.target.getAttribute('data-close') == '') {
             closeModal();
         }
 
     });
 
-    document.addEventListener('keydown', (e)=>{
-        if(e.code==="Escape" && modal.classList.contains('show')){
+    document.addEventListener('keydown', (e) => {
+        if (e.code === "Escape" && modal.classList.contains('show')) {
             closeModal();
         }
 
     });
 
-    const modalTimerId=setTimeout(openModal, 3000);
-    
-// window.pageYOffset; // свойство которое отвечает за прокрутку сверху
-//document.documentElement.clientHeight // свойство которое отображает высоту видимой части клиенту
-// document.documentElement.scrollHeight // свойство которое отображает высоту с полным контентом,с полной прокруткой 
+    const modalTimerId = setTimeout(openModal, 3000);
 
-    function showModalByScroll(){
-        if(window.pageYOffset+document.documentElement.clientHeight===document.documentElement.scrollHeight){
+    // window.pageYOffset; // свойство которое отвечает за прокрутку сверху
+    //document.documentElement.clientHeight // свойство которое отображает высоту видимой части клиенту
+    // document.documentElement.scrollHeight // свойство которое отображает высоту с полным контентом,с полной прокруткой 
+
+    function showModalByScroll() {
+        if (window.pageYOffset + document.documentElement.clientHeight === document.documentElement.scrollHeight) {
             openModal();
             window.removeEventListener('scroll', showModalByScroll);
         }
-        
+
     }
 
     window.addEventListener('scroll', showModalByScroll);
@@ -159,19 +159,19 @@ document.addEventListener('DOMContentLoaded',() => {
     // Создаем классы
 
     class MenuCard {
-        constructor(src, alt, title, descr, price, parentSelector){
-            this.src=src;
-            this.alt=alt;
-            this.title=title;
-            this.descr=descr;
-            this.price=price;
-            this.parent=document.querySelector(parentSelector);
-            this.transfer=27;
+        constructor(src, alt, title, descr, price, parentSelector) {
+            this.src = src;
+            this.alt = alt;
+            this.title = title;
+            this.descr = descr;
+            this.price = price;
+            this.parent = document.querySelector(parentSelector);
+            this.transfer = 27;
             this.changeToUAH();
         }
 
-        changeToUAH(){
-            this.price=this.price*this.transfer;
+        changeToUAH() {
+            this.price = this.price * this.transfer;
         }
 
         // render() {}=> В этом методе нам  нужно 
@@ -179,10 +179,10 @@ document.addEventListener('DOMContentLoaded',() => {
         // 2) в него поместить верстку; 
         // 3) Эту верстку дополнить данными которые приходят как аргументы
         // 4) Поместить этот элемент на страницу
-        
-        render(){
-            const element=document.createElement('div');
-                element.innerHTML=`
+
+        render() {
+            const element = document.createElement('div');
+            element.innerHTML = `
                 <div class="menu__item">
                 <img src=${this.src} alt=${this.alt}>
                 <h3 class="menu__item-subtitle">${this.title}</h3>
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded',() => {
         'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
         9,
         '.menu .container'
-        ).render();
+    ).render();
 
     new MenuCard(
         "img/tabs/elite.jpg",
@@ -217,64 +217,74 @@ document.addEventListener('DOMContentLoaded',() => {
 
     // FORMS
 
-    const forms=document.querySelectorAll('form');
+    const forms = document.querySelectorAll('form');
 
-    const message={
+    const message = {
         loading: 'img/form/spinner.svg',
         success: "We will contact you soon",
         failure: "Oops, something gone wrong"
     };
 
-    forms.forEach(item =>{         //   функции с переменной вызываются после объявления самой функции
+    forms.forEach(item => { //   функции с переменной вызываются после объявления самой функции
         postData(item);
     });
 
-    function postData (form){   //обычные функции без объявления  переменной могут вызываться где угодно
-        form.addEventListener('submit', (e)=>{
+    function postData(form) { //обычные функции без объявления  переменной могут вызываться где угодно
+        form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const statusMessage=document.createElement('img');
-            statusMessage.src=message.loading;
-            statusMessage.style.cssText=`
+            const statusMessage = document.createElement('img');
+            statusMessage.src = message.loading;
+            statusMessage.style.cssText = `
             display:block;
             margin: 0 auto;
             `;
             //form.append(statusMessage);
             form.insertAdjacentElement('afterend', statusMessage);
 
-            const request=new XMLHttpRequest();
-            request.open('POST', 'server.php');
-            
-            const formData=new FormData(form);
-            request.send(formData);
 
 
-            request.addEventListener('load',()=>{
-                if(request.status===200){
-                    console.log(request.response);
-                    showThanksModal(message.success);
-                    form.reset();                                 // удаляются values of input
-                                                                 //const timerId=setTimeout(function(){
-                        statusMessage.remove();                 //     console.log('hello');
-                                                   // }, 2000);
-                }else{
-                    showThanksModal(message.failure);
-                }
+            const formData = new FormData(form);
 
+
+            // Отправка данных через Json
+            const object = {};
+            formData.forEach(function (value, key) {
+                object[key] = value;
             });
+
+
+            fetch('server.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json'
+                    },
+                    //body: formData // отправка через formData
+                    body: JSON.stringify(object)
+                })
+                .then(data => data.text())
+                .then(data => {
+                    console.log(data);
+                    showThanksModal(message.success);
+                    statusMessage.remove();
+                }).catch(() => {
+                    showThanksModal(message.failure);
+                }).finally(() => {
+                    form.reset(); // удаляются values of input
+                });
         });
 
     }
 
 
-    function showThanksModal(message){
-        const previousModalDialog=document.querySelector('.modal__dialog');
+    function showThanksModal(message) {
+        const previousModalDialog = document.querySelector('.modal__dialog');
         previousModalDialog.classList.add('hide');
         openModal();
 
-        const thanksModal=document.createElement('div');
+        const thanksModal = document.createElement('div');
         thanksModal.classList.add('modal__dialog');
-        thanksModal.innerHTML=`
+        thanksModal.innerHTML = `
             <div class="modal__content">
                <div class="modal__close" data-close>&times;</div>
                <div class="modal__title"> ${message} </div>
@@ -283,7 +293,7 @@ document.addEventListener('DOMContentLoaded',() => {
         `;
 
         document.querySelector('.modal').append(thanksModal);
-        setTimeout(()=>{
+        setTimeout(() => {
             thanksModal.remove();
             previousModalDialog.classList.add('show');
             previousModalDialog.classList.remove('hide');
@@ -291,7 +301,7 @@ document.addEventListener('DOMContentLoaded',() => {
         }, 4000);
     }
 
-    
 
-    
+
+
 });
