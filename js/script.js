@@ -301,6 +301,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 4000);
     }
 
+    // GETting data with fetch()
+
+    fetch('http://localhost:3000/menu')
+        .then(data => data.json())
+        .then(res =>console.log(res));
 
 
 
