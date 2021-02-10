@@ -198,15 +198,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     new MenuCard(
-        "img/tabs/vegy.jpg",
-        "vegy",
-        'Меню "Фитнес"',
-        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-        9,
-        '.menu .container'
-    ).render();
-
-    new MenuCard(
         "img/tabs/elite.jpg",
         "elite",
         'Меню “Премиум”',
@@ -226,10 +217,28 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     forms.forEach(item => { //   функции с переменной вызываются после объявления самой функции
-        postData(item);
+        bindPostData(item);
     });
 
-    function postData(form) { //обычные функции без объявления  переменной могут вызываться где угодно
+
+    // POSTing DATA with fetch()
+
+    const postData = async (url, data) => {
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: data
+
+        });
+        return await res.json();
+
+    };
+
+
+
+    function bindPostData(form) { //обычные функции без объявления  переменной могут вызываться где угодно
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -242,27 +251,17 @@ document.addEventListener('DOMContentLoaded', () => {
             //form.append(statusMessage);
             form.insertAdjacentElement('afterend', statusMessage);
 
-
-
             const formData = new FormData(form);
 
 
-            // Отправка данных через Json
-            const object = {};
-            formData.forEach(function (value, key) {
-                object[key] = value;
-            });
+            // Отправка данных through Object.fromentries and formData.entries();
+
+            const json = JSON.stringify(Object.fromEntries(formData.entries()));
+            // formData.entries() превращает в массив массивов, затем
+            // Object.fromEntries преобразует Array в Object
 
 
-            fetch('server.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-type': 'application/json'
-                    },
-                    //body: formData // отправка через formData
-                    body: JSON.stringify(object)
-                })
-                .then(data => data.text())
+            postData(' http://localhost:3000/requests', json)
                 .then(data => {
                     console.log(data);
                     showThanksModal(message.success);
@@ -305,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetch('http://localhost:3000/menu')
         .then(data => data.json())
-        .then(res =>console.log(res));
+        .then(res => console.log(res));
 
 
 
