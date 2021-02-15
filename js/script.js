@@ -197,14 +197,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    new MenuCard(
-        "img/tabs/elite.jpg",
-        "elite",
-        'Меню “Премиум”',
-        'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
-        9,
-        '.menu .container'
-    ).render();
+    const getResourses = async (url) => {
+        const res = await fetch(url);
+        // У fetch промиса есть такие свойства как "ок", 'status', и объект error.
+        if (!res.ok) {
+            throw new Error(`Could not fetch ${url}, status ${res.status}`);
+        }
+        return await res.json(); // превращает данные обратно в js объект
+    };
+
+    getResourses('http://localhost:3000/menu')
+        .then(data => {
+            data.forEach(({
+                img,
+                altimg,
+                title,
+                descr,
+                price
+            }) => {
+                new MenuCard(img, altimg, title, descr, price, '.menu .container').render();
+            });
+        });
+
+
+    // new MenuCard(
+    //     "img/tabs/elite.jpg",
+    //     "elite",
+    //     'Меню “Премиум”',
+    //     'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
+    //     9,
+    //     '.menu .container'
+    // ).render();
 
     // FORMS
 
