@@ -364,6 +364,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         slidesField.style.transform = `translateX(-${offset}px)`; // translateX ззначит по горизонтали; знак "-" означает налево
 
+        if (slideIndex == slides.length) {
+            slideIndex = 1;
+        } else {
+            slideIndex++;
+        }
+
+        if (slides.length < 10) {
+            current.textContent = `0${slideIndex}`;
+        } else {
+            current.textContent = slideIndex;
+        }
     });
 
     prev.addEventListener('click', () => {
@@ -374,6 +385,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         slidesField.style.transform = `translateX(-${offset}px)`; // translateX ззначит по горизонтали; знак "-" означает налево
 
+
+        if (slideIndex == 1) {
+            slideIndex = slides.length;
+        } else {
+            slideIndex--;
+        }
+
+        if (slides.length < 10) {
+            current.textContent = `0${slideIndex}`;
+        } else {
+            current.textContent = slideIndex;
+        }
     });
 
 
