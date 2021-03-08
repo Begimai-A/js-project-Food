@@ -342,8 +342,6 @@ document.addEventListener('DOMContentLoaded', () => {
         slidesWrapper = document.querySelector('.offer__slider-wrapper'),
         slidesField = document.querySelector('.offer__slider_inner'),
         width = window.getComputedStyle(slidesWrapper).width;
-    console.log(width);
-    console.log(slides.length - 1);
 
     let slideIndex = 1;
     let offset = 0;
@@ -493,6 +491,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
    calcTotal();
+
+   function getStaticInfo(parentSelector, activeClass){
+       const elements=document.querySelectorAll(`${parentSelector} div`);
+
+       document.querySelector(parentSelector).addEventListener('click', (e)=>{
+        if (e.target.getAttribute('data-ratio')){
+            ratio=+e.target.getAttribute('data-ratio')
+        } else {
+            sex=e.target.getAttribute('id');
+        }
+
+        console.log(ratio, sex);
+
+        elements.forEach( elem=>{
+            elem.classList.remove(activeClass);
+        });
+
+        e.target.classList.add(activeClass)
+       });
+    }
+
+    getStaticInfo('#gender', 'calculating__choose-item_active');
+    getStaticInfo('.calculating__choose_big','calculating__choose-item_active');
 
 
 
