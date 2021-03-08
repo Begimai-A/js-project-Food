@@ -474,48 +474,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+    // Calculator
+
+    const result=document.querySelector('.calculating__result span');
+    let sex, height, weight, age, ratio;
+
+    function calcTotal() {
+        if (!sex || !height || !weight || !age || !ratio) {
+            result.textContent='____';
+            return; // posle return vse dalneywie deystviya ne budut rabotat
+        }
+        // a esli u nas vse v poryadke to zarabotaet sled.kod
+        if (sex==='female') {
+            result.textContent=(447.6 + (9.2 *weight) + (3.1 *height) - (4.3 *age)) * ratio;
+        } else {
+            result.textContent=(88.36 + (13.4 * weight) + (4.8 *height) - (5.7 * age)) * ratio;
+        }
+    }
+
+   calcTotal();
 
 
 
-    // if (slides.length < 10) {
-    //     total.textContent = `0${slides.length}`;
-    // } else {
-    //     total.textContent = slides.length;
-    // }
 
-    // showSlides(slideIndex);
 
-    // function showSlides(n) {
-    //     if (n > slides.length) {
-    //         slideIndex = 1;
-    //     }
-
-    //     if (n < 1) {
-    //         slideIndex = slides.length;
-    //     }
-
-    //     slides.forEach(item => item.style.display = 'none');
-    //     slides[slideIndex - 1].style.display = 'block';
-
-    //     if (slides.length < 10) {
-    //         current.textContent = `0${slideIndex}`;
-    //     } else {
-    //         current.textContent = slideIndex;
-    //     }
-
-    // }
-
-    // function plusSlides(n) {
-    //     showSlides(slideIndex += n);
-    // }
-
-    // prev.addEventListener('click', () => {
-    //     plusSlides(-1);
-    // });
-
-    // next.addEventListener('click', () => {
-    //     plusSlides(1);
-    // });
+   
 
 
 });
