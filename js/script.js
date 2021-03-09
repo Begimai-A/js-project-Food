@@ -400,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
         dots.push(dot);
     }
 
-    function deleteNotDigits(str){
+    function deleteNotDigits(str) {
         return +str.replace(/\D/g, '');
     }
 
@@ -474,70 +474,74 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Calculator
 
-    const result=document.querySelector('.calculating__result span');
-    let sex, height, weight, age, ratio;
+    const result = document.querySelector('.calculating__result span');
+    let sex='female',
+         height, weight, age, 
+    ratio=1.375;
 
     function calcTotal() {
         if (!sex || !height || !weight || !age || !ratio) {
-            result.textContent='____';
+            result.textContent = '____';
             return; // posle return vse dalneywie deystviya ne budut rabotat
         }
         // a esli u nas vse v poryadke to zarabotaet sled.kod
-        if (sex==='female') {
-            result.textContent=(447.6 + (9.2 *weight) + (3.1 *height) - (4.3 *age)) * ratio;
+        if (sex === 'female') {
+            result.textContent = Math.round((447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age)) * ratio);
         } else {
-            result.textContent=(88.36 + (13.4 * weight) + (4.8 *height) - (5.7 * age)) * ratio;
+            result.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)) * ratio);
         }
     }
 
-   calcTotal();
+    calcTotal();
 
-   function getStaticInfo(parentSelector, activeClass){
-       const elements=document.querySelectorAll(`${parentSelector} div`);
+    function getStaticInfo(parentSelector, activeClass) {
+        const elements = document.querySelectorAll(`${parentSelector} div`);
 
-       document.querySelector(parentSelector).addEventListener('click', (e)=>{
-        if (e.target.getAttribute('data-ratio')){
-            ratio=+e.target.getAttribute('data-ratio')
-        } else {
-            sex=e.target.getAttribute('id');
-        }
-
-        console.log(ratio, sex);
-
-        elements.forEach( elem=>{
-            elem.classList.remove(activeClass);
+        elements.forEach(elem=>{
+            elem.addEventListener('click', (e) => {
+                if (e.target.getAttribute('data-ratio')) {
+                    ratio = +e.target.getAttribute('data-ratio')
+                } else {
+                    sex = e.target.getAttribute('id');
+                }
+    
+                console.log(ratio, sex);
+    
+                elements.forEach(elem => {
+                    elem.classList.remove(activeClass);
+                });
+    
+                e.target.classList.add(activeClass);
+    
+                calcTotal();
+    
+            });
         });
 
-        e.target.classList.add(activeClass);
-
-        calcTotal();
-
-       });
-
-       
     }
 
     getStaticInfo('#gender', 'calculating__choose-item_active');
-    getStaticInfo('.calculating__choose_big','calculating__choose-item_active');
+    getStaticInfo('.calculating__choose_big', 'calculating__choose-item_active');
 
-    function getDynamicInfo(selector){
-        const input=document.querySelector(selector);
+    function getDynamicInfo(selector) {
+        const input = document.querySelector(selector);
 
-        input.addEventListener('input', ()=>{
-            switch(input.getAttribute('id')){
+        input.addEventListener('input', () => {
+            switch (input.getAttribute('id')) {
                 case 'height':
-                    height=+input.value;
+                    height = +input.value;
                     break;
                 case 'weight':
-                    weight=+input.value;
+                    weight = +input.value;
                     break;
                 case 'age':
-                    age=+input.value;
+                    age = +input.value;
                     break;
             }
+            calcTotal();
         });
-        
-        calcTotal();
+
+      
     }
 
     getDynamicInfo('#height');
@@ -546,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-   
+
 
 
 });
