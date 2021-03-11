@@ -475,9 +475,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Calculator
 
     const result = document.querySelector('.calculating__result span');
-    let sex='female',
-         height, weight, age, 
-    ratio=1.375;
+    let sex, height, weight, age, ratio;
+
+    if (localStorage.getItem('sex')){
+        sex=localStorage.getItem('sex');
+    }else{
+        sex='female';
+        localStorage.setItem('sex', 'female');
+    }
+
+    if (localStorage.getItem('ratio')){
+        ratio=localStorage.getItem('ratio');
+    }else{
+        ratio=1.375;
+        localStorage.setItem('ratio', 1.375);
+    }
 
     function calcTotal() {
         if (!sex || !height || !weight || !age || !ratio) {
@@ -497,24 +509,26 @@ document.addEventListener('DOMContentLoaded', () => {
     function getStaticInfo(parentSelector, activeClass) {
         const elements = document.querySelectorAll(`${parentSelector} div`);
 
-        elements.forEach(elem=>{
+        elements.forEach(elem => {
             elem.addEventListener('click', (e) => {
                 if (e.target.getAttribute('data-ratio')) {
-                    ratio = +e.target.getAttribute('data-ratio')
+                    ratio = +e.target.getAttribute('data-ratio');
+                    localStorage.setItem('ratio', +e.target.getAttribute('data-ratio'));
                 } else {
                     sex = e.target.getAttribute('id');
+                    localStorage.setItem('sex',e.target.getAttribute('id') );
                 }
-    
+
                 console.log(ratio, sex);
-    
+
                 elements.forEach(elem => {
                     elem.classList.remove(activeClass);
                 });
-    
+
                 e.target.classList.add(activeClass);
-    
+
                 calcTotal();
-    
+
             });
         });
 
@@ -527,6 +541,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const input = document.querySelector(selector);
 
         input.addEventListener('input', () => {
+            if (input.value.match(/\D/g)) { // refular exprs controls whether digits were typed
+                input.style.border = '2px solid red';
+            }else{
+                input.style.border = 'none';
+            }
             switch (input.getAttribute('id')) {
                 case 'height':
                     height = +input.value;
@@ -541,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
             calcTotal();
         });
 
-      
+
     }
 
     getDynamicInfo('#height');
