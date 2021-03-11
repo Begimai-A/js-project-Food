@@ -477,19 +477,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const result = document.querySelector('.calculating__result span');
     let sex, height, weight, age, ratio;
 
-    if (localStorage.getItem('sex')){
-        sex=localStorage.getItem('sex');
-    }else{
-        sex='female';
+    if (localStorage.getItem('sex')) {
+        sex = localStorage.getItem('sex');
+    } else {
+        sex = 'female';
         localStorage.setItem('sex', 'female');
     }
 
-    if (localStorage.getItem('ratio')){
-        ratio=localStorage.getItem('ratio');
-    }else{
-        ratio=1.375;
+    if (localStorage.getItem('ratio')) {
+        ratio = localStorage.getItem('ratio');
+    } else {
+        ratio = 1.375;
         localStorage.setItem('ratio', 1.375);
     }
+
+    function initLocalSettings(selector, activeClass) {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(elem => {
+            elem.classList.remove(activeClass);
+            if (elem.getAttribute('id') === localStorage.getItem('sex')) {
+                elem.classList.add(activeClass);
+            }
+            if (elem.getAttribute('data-ratio') === localStorage.getItem('ratio')) {
+                elem.classList.add(activeClass);
+            }
+        });
+    }
+
+    initLocalSettings("#gender div", 'calculating__choose-item_active');
+    initLocalSettings('.calculating__choose_big div', 'calculating__choose-item_active');
 
     function calcTotal() {
         if (!sex || !height || !weight || !age || !ratio) {
@@ -506,8 +522,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     calcTotal();
 
-    function getStaticInfo(parentSelector, activeClass) {
-        const elements = document.querySelectorAll(`${parentSelector} div`);
+    function getStaticInfo(selector, activeClass) {
+        const elements = document.querySelectorAll(selector);
 
         elements.forEach(elem => {
             elem.addEventListener('click', (e) => {
@@ -516,7 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('ratio', +e.target.getAttribute('data-ratio'));
                 } else {
                     sex = e.target.getAttribute('id');
-                    localStorage.setItem('sex',e.target.getAttribute('id') );
+                    localStorage.setItem('sex', e.target.getAttribute('id'));
                 }
 
                 console.log(ratio, sex);
@@ -534,8 +550,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
-    getStaticInfo('#gender', 'calculating__choose-item_active');
-    getStaticInfo('.calculating__choose_big', 'calculating__choose-item_active');
+    getStaticInfo('#gender div', 'calculating__choose-item_active'); // прописываем div потому что мы обращаемся к блокам внутри данных селекторов
+    getStaticInfo('.calculating__choose_big div', 'calculating__choose-item_active');
 
     function getDynamicInfo(selector) {
         const input = document.querySelector(selector);
@@ -543,7 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('input', () => {
             if (input.value.match(/\D/g)) { // refular exprs controls whether digits were typed
                 input.style.border = '2px solid red';
-            }else{
+            } else {
                 input.style.border = 'none';
             }
             switch (input.getAttribute('id')) {
